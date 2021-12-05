@@ -27,11 +27,13 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        // 这个写只会加入写队列，等待触发flush操作
         ctx.write(msg);
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
+        // 把队列中的数据写出去
         ctx.flush();
     }
 

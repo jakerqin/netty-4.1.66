@@ -315,8 +315,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
             // 底层用的还是java nio原生的SelectorPrivoder来创建
             // 配置非阻塞，并且准备好要关注的网络事件
             channel = channelFactory.newChannel();
-            // 接下来就是让这个channel去监听某个端口号，设置一些网络参数
-
+            // 设置一些网络参数
             init(channel);
         } catch (Throwable t) {
             if (channel != null) {

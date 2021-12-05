@@ -140,6 +140,9 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
             }
             final ChannelPipeline pipeline = pipeline();
             final ByteBufAllocator allocator = config.getAllocator();
+            // RecvByteBufAllocator 负责去分配ByteBuf数据缓存区的一个组件
+            // 他会动态的根据你上一次请求获取到的数据大小，动态的预估这次请求的数据大小
+            // 根据预估结果创建出来一个比较符合预估大小的一个缓冲区出来
             final RecvByteBufAllocator.Handle allocHandle = recvBufAllocHandle();
             allocHandle.reset(config);
 
@@ -147,7 +150,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
             boolean close = false;
             try {
                 do {
-                    // 分配一个byteBuf
+                    // 通过上面创建的handler分配一个byteBuf
                     byteBuf = allocHandle.allocate(allocator);
                     // 重点是doReadBytes方法进行读取和发送
                     allocHandle.lastBytesRead(doReadBytes(byteBuf));
@@ -170,6 +173,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
                 } while (allocHandle.continueReading());
 
                 allocHandle.readComplete();
+                // 收到请求的响应数据的处理在这里
                 pipeline.fireChannelReadComplete();
 
                 if (close) {

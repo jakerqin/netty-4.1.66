@@ -68,6 +68,9 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
             assert eventLoop().inEventLoop();
             final ChannelConfig config = config();
             final ChannelPipeline pipeline = pipeline();
+            // RecvByteBufAllocator 负责去分配ByteBuf数据缓存区的一个组件
+            // 他会动态的根据你上一次请求获取到的数据大小，动态的预估这次请求的数据大小
+            // 根据预估结果创建出来一个比较符合预估大小的一个缓冲区出来
             final RecvByteBufAllocator.Handle allocHandle = unsafe().recvBufAllocHandle();
             allocHandle.reset(config);
 

@@ -248,7 +248,9 @@ public abstract class AbstractNioChannel extends AbstractChannel {
                 }
 
                 boolean wasActive = isActive();
+                // doConnect方法中调用原生的channel.connect 向服务端发起建立连接
                 if (doConnect(remoteAddress, localAddress)) {
+                    // 连接建立成功了之后，这个方法触发 channelActive
                     fulfillConnectPromise(promise, wasActive);
                 } else {
                     connectPromise = promise;

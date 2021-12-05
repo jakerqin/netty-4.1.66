@@ -1128,7 +1128,9 @@ public abstract class AbstractByteBuf extends ByteBuf {
 
     @Override
     public int writeBytes(ScatteringByteChannel in, int length) throws IOException {
+        // 检查是否能写
         ensureWritable(length);
+        // setBytes() 中调用原生Nio 的 read方法进行读取
         int writtenBytes = setBytes(writerIndex, in, length);
         if (writtenBytes > 0) {
             writerIndex += writtenBytes;
